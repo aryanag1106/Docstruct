@@ -1,0 +1,78 @@
+stages:
+  - lint
+  - typecheck
+  - security
+  - test
+  - build
+  - docs
+
+default:
+  image: python:3.11-slim
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq tesseract-ocr > /dev/null
+    - python -m pip install --upgrade pip -q
+    - pip install -e ".[dev]" -q
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
+ruff:
+  stage: lint
+  script:
+    - ruff check src/ tests/ scripts/
+
+black-format-check:
+  stage: lint
+  script:
+    - black --check src/ tests/ scripts/
+
+mypy:
+  stage: typecheck
+  script:
+    - mypy src/docstruct
+
+bandit:
+  stage: security
+  script:
+    - bandit -r src/
+
+pip-audit:
+  stage: security
+  script:
+    - pip-audit
+
+gitleaks:
+  stage: security
+  image: zricethezav/gitleaks:latest
+  before_script: []  # this stage doesn't need the python before_script above
+  script:
+    - gitleaks detect --source . --no-banner --redact
+
+pytest:
+  stage: test
+  script:
+    - python scripts/generate_sample_data.py
+    - pytest tests/ -v
+
+build-check:
+  stage: build
+  script:
+    - python -c "import docstruct; print('docstruct', docstruct.__version__, 'imports cleanly')"
+
+cli-smoke-test:
+  stage: build
+  script:
+    - python scripts/generate_sample_data.py
+    - docstruct sample_data/receipt.png --doc-type receipt | python -m json.tool
+
+markdownlint:
+  stage: docs
+  image: node:20-slim
+  before_script:
+    - npm install -g markdownlint-cli -s
+  script:
+    - markdownlint README.md CONTRIBUTING.md CHANGELOG.md --disable MD013

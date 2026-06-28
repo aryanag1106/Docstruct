@@ -1,0 +1,175 @@
+# Source of truth for scripts/create_gitlab_issues.py
+#
+# >>> Replace assignee_username placeholders with real GitLab usernames before running the script. <<<
+#
+# Several issues below are already done in this repo's initial commit (the implementation
+# exists and is tested) — they're still listed so the issue tracker accurately documents
+# who built what, and so GitLab's own history matches the real work breakdown. Close them
+# once created, or leave them open if your team wants to re-verify/extend them.
+
+milestones:
+  - name: "Phase 1 - Plan & Spec"
+    due_date: "2026-06-28"
+    description: "Repo, README, spec-kit, issues, work-division plan. Target: 10:00."
+  - name: "Phase 2 - MVP"
+    due_date: "2026-06-28"
+    description: "Working offline demo, CPU-only, document -> structured JSON. Target: lunch."
+  - name: "Phase 3 - Repo Audit"
+    due_date: "2026-06-28"
+    description: "Metadata, README/CONTRIBUTING/CHANGELOG, pre-commit + CI all green, no stub jobs. Target: 15:00."
+
+issues:
+  # ---------- Phase 1 ----------
+  - title: "Write README + problem statement"
+    description: "Problem, features, architecture diagram, tech stack, setup/demo instructions."
+    milestone: "Phase 1 - Plan & Spec"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 0.5
+    due_date: "2026-06-28"
+    labels: ["phase-1", "docs"]
+
+  - title: "Write spec-kit docs (spec.md + plan.md)"
+    description: "Functional/non-functional requirements, I/O formats, edge cases, performance constraints, phased plan."
+    milestone: "Phase 1 - Plan & Spec"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-1", "docs"]
+
+  - title: "Write work-division plan"
+    description: "2-person role split, frozen interfaces, checkpoints."
+    milestone: "Phase 1 - Plan & Spec"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 0.5
+    due_date: "2026-06-28"
+    labels: ["phase-1", "docs"]
+
+  - title: "Push repo to GitLab + mirror to GitHub, set milestones & issues"
+    description: "Create project on code.swecha.org and on GitHub, push both remotes, run create_gitlab_issues.py."
+    milestone: "Phase 1 - Plan & Spec"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 0.5
+    due_date: "2026-06-28"
+    labels: ["phase-1", "devops"]
+
+  # ---------- Phase 2 ----------
+  - title: "schemas.py — Pydantic models for receipt/resume/generic_form"
+    description: "Done in initial commit; re-verify field coverage matches the real sample documents."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-2", "ml"]
+
+  - title: "ocr.py — text-layer PDF + Tesseract OCR with line reconstruction"
+    description: "Done in initial commit (incl. fix: group OCR words by line, not flattened). Extend language packs if needed."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 1.5
+    due_date: "2026-06-28"
+    labels: ["phase-2", "pipeline"]
+
+  - title: "preprocess.py — OpenCV deskew/denoise for photographed documents"
+    description: "Done in initial commit. Tune threshold parameters against real demo photos."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-2", "pipeline"]
+
+  - title: "gbnf.py — generic JSON grammar for llama.cpp constrained decoding"
+    description: "Done in initial commit. Stretch: per-schema grammar generation (see plan.md)."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-2", "ml"]
+
+  - title: "llm_extract.py — wire the real llama.cpp backend against a downloaded model"
+    description: "Mock backend + function signature done in initial commit. Remaining: download a GGUF model, set DOCSTRUCT_MODEL_PATH, validate real output quality, tune the prompt."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 2
+    due_date: "2026-06-28"
+    labels: ["phase-2", "ml"]
+
+  - title: "validate.py — schema + business-rule + OCR-confidence flagging"
+    description: "Done in initial commit, including the needs_review-not-fabricated test."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-2", "ml"]
+
+  - title: "pipeline.py + cli.py — glue and Typer CLI"
+    description: "Done in initial commit and smoke-tested via the installed `docstruct` console command."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-2", "pipeline"]
+
+  - title: "Streamlit web UI polish"
+    description: "Functional version done in initial commit; remaining: visual polish, error-state UX pass."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 1.5
+    due_date: "2026-06-28"
+    labels: ["phase-2", "frontend"]
+
+  - title: "Sample-data generator + pytest suite (incl. no-network test)"
+    description: "Done in initial commit: 10 tests passing, covering all 3 OCR code paths plus the network-blocked proof."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 1.5
+    due_date: "2026-06-28"
+    labels: ["phase-2", "qa"]
+
+  - title: "Record full demo with network disabled"
+    description: "Wi-Fi off, run CLI + Streamlit against sample_data, show >=1 needs_review case, show test_no_network.py passing live."
+    milestone: "Phase 2 - MVP"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 0.5
+    due_date: "2026-06-28"
+    labels: ["phase-2", "qa"]
+
+  # ---------- Phase 3 ----------
+  - title: "pre-commit config: ruff, black, mypy, bandit, gitleaks, markdownlint, commitizen"
+    description: "Written and validated in initial commit (all non-network-blocked hooks pass locally)."
+    milestone: "Phase 3 - Repo Audit"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-3", "devops"]
+
+  - title: ".gitlab-ci.yml: 10 real checks across lint/typecheck/security/test/build/docs, on local Runner"
+    description: "Written in initial commit. Register the local GitLab Runner and confirm a real pipeline run is green."
+    milestone: "Phase 3 - Repo Audit"
+    assignee_username: "replace_with_gitlab_username1"
+    estimate_hours: 1.5
+    due_date: "2026-06-28"
+    labels: ["phase-3", "devops"]
+
+  - title: ".github/workflows/ci.yml mirror for the GitHub remote"
+    description: "Written in initial commit; confirm it goes green on the actual GitHub repo after push."
+    milestone: "Phase 3 - Repo Audit"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 0.5
+    due_date: "2026-06-28"
+    labels: ["phase-3", "devops"]
+
+  - title: "CONTRIBUTING.md, CHANGELOG.md, repo metadata/topics/badges"
+    description: "Written in initial commit; add badges once both CI pipelines have run at least once."
+    milestone: "Phase 3 - Repo Audit"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 0.5
+    due_date: "2026-06-28"
+    labels: ["phase-3", "docs"]
+
+  - title: "Full self-audit: zero stub jobs, all pipelines genuinely green"
+    description: "Re-read every CI/pre-commit job definition; confirm none is echo/exit-0/disabled; fix anything red."
+    milestone: "Phase 3 - Repo Audit"
+    assignee_username: "replace_with_gitlab_username2"
+    estimate_hours: 1
+    due_date: "2026-06-28"
+    labels: ["phase-3", "qa"]

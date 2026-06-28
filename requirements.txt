@@ -1,0 +1,25 @@
+# Mirrors pyproject.toml's [project.dependencies] + optional groups, for anyone who
+# prefers `pip install -r requirements.txt` over `pip install -e .`. pyproject.toml is
+# the source of truth; keep these in sync if you add a dependency.
+
+pytesseract>=0.3.10
+PyMuPDF>=1.24
+Pillow>=10.0
+opencv-python-headless>=4.9
+pydantic>=2.6
+typer>=0.12
+
+# Optional: real LLM backend (do NOT install a CUDA build)
+# llama-cpp-python>=0.2.90
+
+# Optional: web UI
+# streamlit>=1.33
+
+# Optional: dev tools
+# pytest>=8.0
+# ruff>=0.4
+# black>=24.0
+# mypy>=1.9
+# bandit>=1.7
+# pip-audit>=2.7
+# pre-commit>=3.7
