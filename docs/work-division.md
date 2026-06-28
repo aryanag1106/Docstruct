@@ -6,8 +6,8 @@
 
 | Role | Placeholder | Real name | GitLab username | GitHub username | Owns |
 |---|---|---|---|---|---|
-| Person 1 — OCR / preprocessing / file handling | Person1 | _fill in_ | `replace_with_gitlab_username1` | `replace_with_github_username1` | `ocr.py`, `preprocess.py`, `cli.py`, README/spec docs, CI/pre-commit setup |
-| Person 2 — LLM parsing / structuring / UI | Person2 | _fill in_ | `replace_with_gitlab_username2` | `replace_with_github_username2` | `schemas.py`, `gbnf.py`, `llm_extract.py`, `validate.py`, `pipeline.py`, `app_streamlit.py` |
+| Person 1 — OCR / preprocessing / file handling | Person1 | Aryan Agarwal | `AryanAg` | `AryanAg` | `ocr.py`, `preprocess.py`, `cli.py`, README/spec docs, CI/pre-commit setup |
+| Person 2 — LLM parsing / structuring / UI | Person2 | Sejal | `sejal_521` | `sejal_521` | `schemas.py`, `gbnf.py`, `llm_extract.py`, `validate.py`, `pipeline.py`, `app_streamlit.py` |
 
 ## Why this split
 Tesseract/PyMuPDF/OpenCV work (Person 1) and Pydantic-schema/llama.cpp work (Person 2) touch almost entirely different files and different dependency stacks — they can be developed in parallel from the first hour, as long as the interface between them is frozen early.
