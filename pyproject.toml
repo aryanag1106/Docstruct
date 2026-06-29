@@ -22,7 +22,7 @@ dependencies = [
 [project.optional-dependencies]
 llm = ["llama-cpp-python>=0.2.90"]
 web = ["streamlit>=1.33"]
-dev = ["pytest>=8.0", "ruff>=0.4", "black>=24.0", "mypy>=1.9", "bandit>=1.7", "pip-audit>=2.7"]
+dev = ["pytest>=8.0", "ruff>=0.4", "black>=24.0", "mypy>=1.9", "bandit>=1.7", "pip-audit>=2.7", "wheel>=0.46.2"]
 
 [project.scripts]
 docstruct = "docstruct.cli:app"
