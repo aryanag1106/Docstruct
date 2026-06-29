@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "docstruct"
-version = "0.1.0"
+version = "0.2.0"
 description = "Offline, CPU-only document -> structured JSON extractor"
 readme = "README.md"
 license = { text = "GPL-3.0-or-later" }
@@ -41,6 +41,10 @@ select = ["E", "F", "I", "UP", "B"]
 # typer.Argument()/typer.Option() in default args is the documented, correct way to
 # use Typer — not the antipattern B008 is meant to catch (mutable default args).
 "src/docstruct/cli.py" = ["B008"]
+# Long lines here are CSS rules and HTML template strings, not Python logic — the
+# line-length rule exists to keep code reviewable, which doesn't apply to a one-line
+# CSS class declaration.
+"src/docstruct/app_streamlit.py" = ["E501"]
 
 [tool.black]
 line-length = 110
@@ -53,5 +57,5 @@ disallow_untyped_defs = false
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.1.0"
+version = "0.2.0"
 tag_format = "v$version"
