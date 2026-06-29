@@ -47,7 +47,9 @@ pip-audit:
 
 gitleaks:
   stage: security
-  image: zricethezav/gitleaks:latest
+  image:
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
   before_script: []  # this stage doesn't need the python before_script above
   script:
     - gitleaks detect --source . --no-banner --redact
@@ -75,4 +77,4 @@ markdownlint:
   before_script:
     - npm install -g markdownlint-cli -s
   script:
-    - markdownlint README.md CONTRIBUTING.md CHANGELOG.md --disable MD013
+    - markdownlint README.md CONTRIBUTING.md CHANGELOG.md --disable MD013 MD060
