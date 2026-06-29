@@ -13,12 +13,20 @@ consumes its `OcrResult` output, never raw bytes.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import fitz  # PyMuPDF
 import pytesseract
 from PIL import Image
+
+# If Tesseract isn't on PATH (a common Windows headache), set TESSERACT_CMD to its
+# full .exe path instead of fighting PATH/environment-variable propagation:
+#   $env:TESSERACT_CMD = "C:\Program Files\Tesseract-OCR\tesseract.exe"
+_tesseract_cmd = os.environ.get("TESSERACT_CMD")
+if _tesseract_cmd:
+    pytesseract.pytesseract.tesseract_cmd = _tesseract_cmd
 
 MIN_EMBEDDED_TEXT_CHARS = 20  # below this, a "text" PDF page is treated as scanned
 
@@ -61,6 +69,11 @@ def _ocr_image(img: Image.Image, lang: str = "eng") -> OcrResult:
 def extract_text(path: str | Path, lang: str = "eng") -> OcrResult:
     path = Path(path)
     suffix = path.suffix.lower()
+
+    if suffix == ".txt":
+        return OcrResult(
+            text=path.read_text(encoding="utf-8", errors="replace"), source="plain_text", mean_confidence=None
+        )
 
     if suffix == ".pdf":
         doc = fitz.open(path)

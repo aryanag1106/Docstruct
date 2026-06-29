@@ -14,7 +14,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, field_validator
 
-DocType = Literal["receipt", "resume", "generic_form"]
+DocType = Literal["receipt", "invoice", "resume", "generic_form"]
 
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 PHONE_RE = re.compile(r"^[\d\-\+\(\)\s]{7,20}$")
@@ -30,6 +30,24 @@ class LineItem(BaseModel):
 class ReceiptFields(BaseModel):
     merchant_name: str | None = None
     date: str | None = None  # left as free text; validate.py checks plausibility, doesn't coerce
+    currency: str | None = "INR"
+    line_items: list[LineItem] = Field(default_factory=list)
+    subtotal: float | None = None
+    tax_amount: float | None = None
+    total_amount: float | None = None
+
+
+class InvoiceFields(BaseModel):
+    """Distinct from ReceiptFields: invoices carry a number/due-date and a vendor +
+    customer pair, none of which a retail receipt has."""
+
+    invoice_number: str | None = None
+    invoice_date: str | None = None
+    due_date: str | None = None
+    vendor_name: str | None = None
+    vendor_address: str | None = None
+    customer_name: str | None = None
+    customer_address: str | None = None
     currency: str | None = "INR"
     line_items: list[LineItem] = Field(default_factory=list)
     subtotal: float | None = None
@@ -73,6 +91,7 @@ class GenericFormFields(BaseModel):
 
 SCHEMA_BY_DOC_TYPE: dict[DocType, type[BaseModel]] = {
     "receipt": ReceiptFields,
+    "invoice": InvoiceFields,
     "resume": ResumeFields,
     "generic_form": GenericFormFields,
 }

@@ -37,6 +37,31 @@ def test_text_pdf_skips_ocr_entirely():
     assert "skills" in result["data"] and len(result["data"]["skills"]) > 0
 
 
+def test_invoice_text_file_skips_ocr_and_extracts_fields():
+    result = process_document(SAMPLE_DIR / "invoice.txt", doc_type="invoice", backend="mock")
+    assert result["ocr_source"] == "plain_text"
+    assert result["data"]["invoice_number"] == "INV-2049"
+    assert result["data"]["total_amount"] == 2341.5
+    assert result["status"] == "ok"
+
+
+def test_auto_detect_classifies_invoice_correctly():
+    result = process_document(SAMPLE_DIR / "invoice.txt", doc_type="auto", backend="mock")
+    assert result["doc_type"] == "invoice"
+    assert result["doc_type_auto_detected"] is True
+
+
+def test_auto_detect_classifies_resume_correctly():
+    result = process_document(SAMPLE_DIR / "resume.pdf", doc_type="auto", backend="mock")
+    assert result["doc_type"] == "resume"
+
+
+def test_processing_seconds_is_reported():
+    result = process_document(SAMPLE_DIR / "receipt.png", doc_type="receipt", backend="mock")
+    assert isinstance(result["processing_seconds"], float)
+    assert result["processing_seconds"] >= 0
+
+
 def test_wrong_doc_type_is_flagged_needs_review_not_fabricated():
     """A resume run through the receipt schema should never produce a plausible-looking
     total — it should come back flagged, which is the whole point of validate.py."""

@@ -1,10 +1,17 @@
-from docstruct.schemas import GenericFormFields, ReceiptFields, ResumeFields, json_schema_for
+from docstruct.schemas import GenericFormFields, InvoiceFields, ReceiptFields, ResumeFields, json_schema_for
 
 
 def test_receipt_fields_accepts_partial_data():
     r = ReceiptFields.model_validate({"merchant_name": "Test Store", "total_amount": 100.5})
     assert r.merchant_name == "Test Store"
     assert r.currency == "INR"  # default
+
+
+def test_invoice_fields_accepts_partial_data():
+    inv = InvoiceFields.model_validate({"invoice_number": "INV-001", "total_amount": 500.0})
+    assert inv.invoice_number == "INV-001"
+    assert inv.vendor_name is None
+    assert inv.line_items == []
 
 
 def test_resume_fields_defaults_are_empty_not_none():
@@ -19,7 +26,7 @@ def test_generic_form_fields_roundtrip():
 
 
 def test_json_schema_for_every_doc_type():
-    for doc_type in ("receipt", "resume", "generic_form"):
+    for doc_type in ("receipt", "invoice", "resume", "generic_form"):
         schema = json_schema_for(doc_type)  # type: ignore[arg-type]
         assert schema["type"] == "object"
         assert "properties" in schema

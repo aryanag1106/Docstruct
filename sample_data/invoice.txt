@@ -1,0 +1,18 @@
+INVOICE
+
+Invoice Number: INV-2049
+Invoice Date: 10/06/2026
+Due Date: 24/06/2026
+
+Vendor: Bluewave Office Supplies
+Customer: Riya Sharma
+
+Items:
+Printer paper (5 reams)      1250.00
+Ink cartridges (2)            980.00
+
+Subtotal:                    2230.00
+Tax:                          111.50
+Total:                        2341.50
+
+Payment due within 14 days.

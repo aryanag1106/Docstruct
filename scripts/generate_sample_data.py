@@ -45,17 +45,64 @@ B.Tech Computer Science, Springfield Institute of Technology, 2020
 """
 
 
+FONT_CANDIDATES = [
+    # Linux
+    "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf",
+    "/usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf",
+    # Windows
+    "C:\\Windows\\Fonts\\consola.ttf",
+    "C:\\Windows\\Fonts\\arial.ttf",
+    # macOS
+    "/System/Library/Fonts/Menlo.ttc",
+    "/System/Library/Fonts/Supplemental/Arial.ttf",
+]
+
+
+def _load_font(size: int = 16) -> ImageFont.ImageFont:
+    for path in FONT_CANDIDATES:
+        try:
+            return ImageFont.truetype(path, size)
+        except OSError:
+            continue
+    # No system font found at any candidate path. PIL's classic load_default() is a
+    # tiny, low-res bitmap font that Tesseract OCRs unreliably — Pillow >=10.1 lets
+    # you request it at a larger, scalable size instead, which OCRs far better.
+
+
+INVOICE_TEXT = """INVOICE
+
+Invoice Number: INV-2049
+Invoice Date: 10/06/2026
+Due Date: 24/06/2026
+
+Vendor: Bluewave Office Supplies
+Customer: Riya Sharma
+
+Items:
+Printer paper (5 reams)      1250.00
+Ink cartridges (2)            980.00
+
+Subtotal:                    2230.00
+Tax:                          111.50
+Total:                        2341.50
+
+Payment due within 14 days.
+"""
+
+
+def make_invoice_text_file(out_path: Path) -> None:
+    """A plain .txt invoice — exercises the no-OCR-needed plain_text path in ocr.py."""
+    out_path.write_text(INVOICE_TEXT, encoding="utf-8")
+
+
 def make_receipt_image(path: Path) -> None:
-    img = Image.new("RGB", (500, 420), color="white")
+    img = Image.new("RGB", (1000, 840), color="white")
     draw = ImageDraw.Draw(img)
-    try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", 16)
-    except OSError:
-        font = ImageFont.load_default()
-    y = 10
+    font = _load_font(32)
+    y = 20
     for line in RECEIPT_LINES:
-        draw.text((20, y), line, fill="black", font=font)
-        y += 26
+        draw.text((40, y), line, fill="black", font=font)
+        y += 52
     img.save(path)
 
 
@@ -82,6 +129,7 @@ def main() -> None:
     make_receipt_image(receipt_png)
     make_receipt_scanned_pdf(receipt_png, OUT_DIR / "receipt_scanned.pdf")
     make_resume_text_pdf(OUT_DIR / "resume.pdf")
+    make_invoice_text_file(OUT_DIR / "invoice.txt")
     print(f"Generated sample data in {OUT_DIR}")
 
 
