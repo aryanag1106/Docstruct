@@ -35,16 +35,20 @@ repos:
         args: ["-r"]
         files: ^src/
 
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.18.4
+  - repo: local
     hooks:
       - id: gitleaks
+        name: gitleaks
+        description: Detect hardcoded secrets using Gitleaks (local binary — see README/CONTRIBUTING for install)
+        entry: gitleaks detect --source . --no-banner --redact
+        language: system
+        pass_filenames: false
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.41.0
     hooks:
       - id: markdownlint
-        args: ["--disable", "MD013"]
+        args: ["--disable", "MD013", "MD060"]
 
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v3.27.0

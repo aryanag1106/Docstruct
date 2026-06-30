@@ -15,6 +15,16 @@ pre-commit install --hook-type commit-msg   # for the commitizen commit-message 
 python scripts/generate_sample_data.py
 ```
 
+### gitleaks (one extra step — no Go toolchain needed)
+
+The pre-commit gitleaks hook calls a local `gitleaks` binary rather than building from source (that build needs a Go toolchain, which most machines don't have). Install it once:
+
+- **Windows**: download the `windows_x64` zip from <https://github.com/gitleaks/gitleaks/releases/latest>, extract `gitleaks.exe` somewhere on your `PATH` (e.g. `C:\Tools`), then add that folder to PATH.
+- **macOS**: `brew install gitleaks`
+- **Linux**: download the matching `linux_x64` tarball from the releases page above, extract `gitleaks`, and move it to `/usr/local/bin`.
+
+Verify with `gitleaks version`. CI doesn't need this step — `.gitlab-ci.yml`'s `gitleaks` job runs in its own Docker container, completely independent of your local machine.
+
 ## Commit style
 
 Conventional commits, enforced by `commitizen` at commit time: `feat:`, `fix:`, `docs:`, `chore:`, `test:`, `refactor:`. One logical change per commit.
