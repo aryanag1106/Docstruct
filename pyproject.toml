@@ -59,3 +59,6 @@ disallow_untyped_defs = false
 name = "cz_conventional_commits"
 version = "0.2.0"
 tag_format = "v$version"
+
+[tool.pytest.ini_options]
+pythonpath = ["src", "."]

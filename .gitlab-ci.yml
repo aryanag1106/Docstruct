@@ -30,6 +30,11 @@ black-format-check:
   script:
     - black --check src/ tests/ scripts/
 
+commit-message-lint:
+  stage: lint
+  script:
+    - python scripts/check_commit_message.py "$CI_COMMIT_MESSAGE"
+
 mypy:
   stage: typecheck
   script:
