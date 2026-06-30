@@ -1,6 +1,15 @@
 # Mirrors pyproject.toml's [project.dependencies] + optional groups, for anyone who
 # prefers `pip install -r requirements.txt` over `pip install -e .`. pyproject.toml is
 # the source of truth; keep these in sync if you add a dependency.
+#
+# IMPORTANT: this file is also what Streamlit Community Cloud installs from — it only
+# ever runs `pip install -r requirements.txt`, never `pip install -e .`. Without the
+# "-e ." line below, the actual docstruct package code in src/docstruct/ never gets
+# installed there at all, even though every individual dependency does — which is
+# exactly why `from docstruct.pipeline import process_document` failed with
+# ModuleNotFoundError on the deployed app despite working perfectly locally.
+
+-e .
 
 pytesseract>=0.3.10
 PyMuPDF>=1.24
@@ -8,12 +17,13 @@ Pillow>=10.0
 opencv-python-headless>=4.9
 pydantic>=2.6
 typer>=0.12
+requests>=2.31
+streamlit>=1.33
 
-# Optional: real LLM backend (do NOT install a CUDA build)
+# Optional: real LLM backend (do NOT install a CUDA build) — not used on Streamlit
+# Cloud, since there's no way to run a background llama.cpp/Ollama process there;
+# only relevant for local installs.
 # llama-cpp-python>=0.2.90
-
-# Optional: web UI
-# streamlit>=1.33
 
 # Optional: dev tools
 # pytest>=8.0
