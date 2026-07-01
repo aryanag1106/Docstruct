@@ -111,7 +111,7 @@ streamlit run src/docstruct/app_streamlit.py
 
 ## 8. License
 
-**GNU GPL-3.0.** See [`LICENSE`](./LICENSE) — a strong copyleft license: any distributed modified version of this project must also be released under GPL-3.0 with source available.
+**GNU AGPL-3.0.** See [`LICENSE`](./LICENSE) — a strong copyleft license: any distributed or network-deployed modified version of this project must also be released under AGPL-3.0 with source available. AGPL-3.0 is stricter than plain GPL-3.0 because it closes the "hosted service" loophole — even running a modified version as a web service requires releasing the source.
 
 ## 9. Repo map
 

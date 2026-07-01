@@ -1,8 +1,10 @@
 stages:
   - lint
-  - typecheck
+  - format
+  - type_check
   - security
   - test
+  - coverage
   - build
   - docs
 
@@ -20,26 +22,30 @@ cache:
   paths:
     - .cache/pip
 
+# ── lint ──────────────────────────────────────────────────────────────────────
 ruff:
   stage: lint
   script:
     - ruff check src/ tests/ scripts/
-
-black-format-check:
-  stage: lint
-  script:
-    - black --check src/ tests/ scripts/
 
 commit-message-lint:
   stage: lint
   script:
     - python scripts/check_commit_message.py "$CI_COMMIT_MESSAGE"
 
+# ── format ────────────────────────────────────────────────────────────────────
+black-format-check:
+  stage: format
+  script:
+    - black --check src/ tests/ scripts/
+
+# ── type_check ────────────────────────────────────────────────────────────────
 mypy:
-  stage: typecheck
+  stage: type_check
   script:
     - mypy src/docstruct
 
+# ── security ──────────────────────────────────────────────────────────────────
 bandit:
   stage: security
   script:
@@ -55,16 +61,25 @@ gitleaks:
   image:
     name: zricethezav/gitleaks:latest
     entrypoint: [""]
-  before_script: []  # this stage doesn't need the python before_script above
+  before_script: []
   script:
     - gitleaks detect --source . --no-banner --redact
 
+# ── test ──────────────────────────────────────────────────────────────────────
 pytest:
   stage: test
   script:
     - python scripts/generate_sample_data.py
     - pytest tests/ -v
 
+# ── coverage ──────────────────────────────────────────────────────────────────
+coverage:
+  stage: coverage
+  script:
+    - python scripts/generate_sample_data.py
+    - pytest tests/ --cov=src/docstruct --cov-report=term-missing --cov-fail-under=40
+
+# ── build ─────────────────────────────────────────────────────────────────────
 build-check:
   stage: build
   script:
@@ -76,6 +91,7 @@ cli-smoke-test:
     - python scripts/generate_sample_data.py
     - docstruct sample_data/receipt.png --doc-type receipt | python -m json.tool
 
+# ── docs ──────────────────────────────────────────────────────────────────────
 markdownlint:
   stage: docs
   image: node:20-slim
@@ -83,3 +99,13 @@ markdownlint:
     - npm install -g markdownlint-cli -s
   script:
     - markdownlint README.md CONTRIBUTING.md CHANGELOG.md --disable MD013 MD060
+
+changelog-check:
+  stage: docs
+  image: python:3.11-slim
+  before_script: []
+  script:
+    - pip install git-cliff -q
+    - git-cliff --config cliff.toml --output /tmp/CHANGELOG_generated.md
+    - echo "Changelog generation succeeded"
+    - head -20 /tmp/CHANGELOG_generated.md

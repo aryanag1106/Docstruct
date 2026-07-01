@@ -7,7 +7,7 @@ name = "docstruct"
 version = "0.2.0"
 description = "Offline, CPU-only document -> structured JSON extractor"
 readme = "README.md"
-license = { text = "GPL-3.0-or-later" }
+license = { text = "AGPL-3.0-or-later" }
 requires-python = ">=3.10"
 dependencies = [
     "pytesseract>=0.3.10",
@@ -22,7 +22,7 @@ dependencies = [
 [project.optional-dependencies]
 llm = ["llama-cpp-python>=0.2.90"]
 web = ["streamlit>=1.33"]
-dev = ["pytest>=8.0", "ruff>=0.4", "black>=24.0", "mypy>=1.9", "bandit>=1.7", "pip-audit>=2.7", "wheel>=0.46.2"]
+dev = ["pytest>=8.0", "pytest-cov>=5.0", "ruff>=0.4", "black>=24.0", "mypy>=1.9", "bandit>=1.7", "pip-audit>=2.7", "wheel>=0.46.2"]
 
 [project.scripts]
 docstruct = "docstruct.cli:app"
